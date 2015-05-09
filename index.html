@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Docs by lizzb</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<style>
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.link {
+    stroke: #999;
+    stroke-opacity: .6;
+}
+#d3-container {
+	border: 1px solid gray;
+}
+</style>
+<script>
+function makeFDgraph(){
+
+
+var links = [
+    {"source":5,"value":1,"target":11},
+    {"source":5,"value":1,"target":12},
+    {"source":10,"value":1,"target":12},
+    {"source":11,"value":1,"target":5},
+    {"source":11,"value":1,"target":12},
+    {"source":11,"value":1,"target":14},
+    {"source":12,"value":1,"target":5},
+    {"source":12,"value":1,"target":10},
+    {"source":12,"value":1,"target":11},
+    {"source":14,"value":1,"target":11},
+    {"source":16,"value":1,"target":19},
+    {"source":18,"value":1,"target":19},
+    {"source":19,"value":1,"target":16},
+    {"source":19,"value":1,"target":18}
+];
+
+var nodes = [
+    {"name":"Vertex 5","group":"topic"},
+    {"name":"Vertex 9","group":"topic"},
+    {"name":"Vertex 15","group":"Virtuals-MacBook-Pro-3-53688"},
+    {"name":"Vertex 20","group":"topic"},
+    {"name":"Vertex 26","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 29","group":"topic"},
+    {"name":"Vertex 33","group":"topic"},
+    {"name":"Vertex 37","group":"topic"},
+    {"name":"Vertex 49","group":"Virtuals-MacBook-Pro-3-53688"},
+    {"name":"Vertex 52","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 53","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 58","group":"topic"},
+    {"name":"Vertex 59","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 65","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 73","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 74","group":"topic"},
+    {"name":"Vertex 80","group":"topic"},
+    {"name":"Vertex 84","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 87","group":"Virtuals-MacBook-Pro-4-40842"},
+    {"name":"Vertex 99","group":"Virtuals-MacBook-Pro-4-40842"}
+];
+
+var width = 450,
+    height = 500;
+
+var color = d3.scale.category10();
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .size([width, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var force = d3.layout.force()
+    .nodes(nodes)
+    .links(links)
+    .size([width, height])
+    .start();
+    
+var link = svg.selectAll(".link")
+    .data(links)
+    .enter().append("line")
+    .attr("class", "link")
+    .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+    
+// You define here your nodes and the color will be d.group
+var node = svg.selectAll(".node")
+    .data(nodes)
+    .enter().append("circle")
+    .attr("class", "node")
+    .attr("r", 5)
+    .style("fill", function(d) { return color(d.group); })
+    .call(force.drag);
+    
+//Display node name when mouse on a node
+node.append("title")
+    .text(function(d) { return d.name; });
+    
+//Where and how nodes are displayed
+force.on("tick", function() {
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+    
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+});
+    
+//Legend
+var legend = svg.selectAll(".legend")
+    .data(color.domain())
+    .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+legend.append("rect")
+    .attr("x", width - 18)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
+
+legend.append("text")
+    .attr("x", width - 24)
+    .attr("y", 9)
+    .attr("dy", ".35em")
+    .style("text-anchor", "end")
+    .text(function(d) { return d; });
+
+}
+
+
+
+function init() {
+
+makeFDgraph();
+
+ var vis = d3.select("#d3-container")
+        .append("svg:svg")
+          .attr("width",w)
+          .attr("height",h);
+
+}
+/*
+http://www.d3noob.org/2013/03/d3js-force-directed-graph-example-basic.html
+https://gist.github.com/d3noob/8043434
+http://jsfiddle.net/Rom2BE/H2PkT/
+http://jsbin.com/xuriwu/1/edit?html,css,js,output
+http://jsfiddle.net/WBkw9/
+http://www.d3noob.org/2013/03/d3js-force-directed-graph-example-basic.html
+*/
+
+
+</script>
+
+
+
+  </head>
+  <body onload="init()">
+
+
+    <div class="wrapper">
+      <header>
+        <h1>Docs</h1>
+        <p>documentary mind map of things i&#39;ve seen and conceptually group together</p>
+
+        <ul>
+          <li><a href="http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/" target="_blank">Download <strong>A to Z of D3 Force Layout</strong></a></li>
+          <li><a href="">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+
+
+
+        <h3>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+
+<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+
+<pre><code>$ cd your_repo_root/repo_name
+$ git fetch origin
+$ git checkout gh-pages
+</code></pre>
+
+<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+
+<div id="d3-container"></div>
+
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/lizzb">lizzb</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
